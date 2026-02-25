@@ -7,11 +7,19 @@
 // 3. Minificação de JavaScript
 
 const gulp = require('gulp');
-const sass = require('gulp-sass');
+const gulpSass = require('gulp-sass');
+const sass = require('sass');
 const imagemin = require('gulp-imagemin');
 const uglify = require('gulp-uglify');
 const concat = require('gulp-concat');
 const sourcemaps = require('gulp-sourcemaps');
+
+// ═══════════════════════════════════════════════════════════
+// INJETAR O COMPILADOR SASS EXPLICITAMENTE
+// ═══════════════════════════════════════════════════════════
+// Necessário para gulp-sass v5+
+
+const sassCompiler = gulpSass(sass);
 
 // ═══════════════════════════════════════════════════════════
 // TAREFA 1: COMPILAÇÃO DE SASS
@@ -23,9 +31,9 @@ function compileSass() {
         .src('src/sass/**/*.scss')
         .pipe(sourcemaps.init())
         .pipe(
-            sass({
+            sassCompiler({
                 outputStyle: 'compressed'
-            }).on('error', sass.logError)
+            }).on('error', sassCompiler.logError)
         )
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('dist/css'));
